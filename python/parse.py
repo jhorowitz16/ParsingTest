@@ -1,31 +1,26 @@
 import json
+import sys
+import pdb
+
+sys.stdout = open('output.txt', 'w')
 
 
 def read_data():
     with open("../../data/message.json", "r") as read_file:
-        data = json.load(read_file)
+        data = json.load(read_file, encoding='utf-8')
         return data["messages"]
 
 
-def print_messages(messages, target):
-    """
-    print messages that were sent by a person (by target letter)
-    """
-    count = 0
-    for message in messages[::-1]:
-        if message["sender_name"][0] == target:
-            print(message["content"])
-            count += 1
-    print(count)
-
-
-def calc_frequency(messages):
+def calc_frequency(messages, target):
     """
     return a frequency dictionary based on the list of messages
     do not include empty strings
+    can filter by person (target letter starting the name)
     """
     freq = {}
     for message in messages:
+        if target and message["sender_name"][0] != target:
+            continue
         words = message["content"].split(" ")
         for word in words:
             if len(word) > 0:
@@ -34,6 +29,7 @@ def calc_frequency(messages):
                 else:
                     freq[word] = 1
     return freq
+
 
 def filter_freq(freq, thresh):
     """
@@ -49,7 +45,7 @@ def filter_freq(freq, thresh):
         if val >= thresh:
             filtered[key] = val
 
-    ratio = len(filtered) / len(freq)
+    ratio = 1.0 * len(filtered) / len(freq)
     return filtered, ratio
 
 
@@ -59,23 +55,48 @@ def pretty_print_freq(freq):
     crop strings that are too long, and add spaces for short ones
     """
 
-    TARGET = 10
+    TARGET = 11
 
     print("================================")
     for word, value in sorted(freq.items(), key=lambda(x): -1 *x[1]):
         n = len(word)
         if n <= TARGET:
-            print(word + ' ' * (TARGET - n) + " | " + str(value))
+            try:
+                print(word + ' ' * (TARGET - n) + " | " + str(value))
+            except UnicodeEncodeError:
+                word = "ENCODE ERROR"
+                print("UNICODE-ERR | " + str(value))
+
     print("================================")
 
 
-if __name__== "__main__":
-    print("begin parsing")
-    data = read_data()
-    freq = calc_frequency(data)
-    filtered, ratio = filter_freq(freq, 50)
+def generate_word_cloud(freq):
+    """
+    get the format the wordcloud is looking for
 
-    print(filtered)
+    """
+    pass
+
+
+def report_metadata(messages, freq, should_print=True):
+    """
+    this prints out the metadata from the messages, frequency dictionary
+    """
+
+    THRESH = 200
+    filtered, ratio= filter_freq(freq, 100)
+
+    print("message count: " + str(len(messages)))
+    print("total unique words: " + str(len(freq)))
+    print("unique words appearing > " \
+        + str(THRESH) + " times: " + str(len(filtered)))
     print("ratio: " + str(ratio))
-
     pretty_print_freq(filtered)
+
+
+if __name__== "__main__":
+    messages = read_data()
+    freq_one = calc_frequency(messages, "W")
+    freq_two = calc_frequency(messages, "J")
+    report_metadata(messages, freq_one)
+    report_metadata(messages, freq_two)
