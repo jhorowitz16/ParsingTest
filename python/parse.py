@@ -1,8 +1,10 @@
 import json
 import sys
 import pdb
+import csv
 
-sys.stdout = open('output.txt', 'w')
+
+# sys.stdout = open('output.txt', 'w')
 
 
 def read_data():
@@ -29,6 +31,24 @@ def calc_frequency(messages, target):
                 else:
                     freq[word] = 1
     return freq
+
+
+def print_messages(messages, target):
+    """
+    print messages that were sent by a person (by target letter)
+    """
+    count = 0
+    for message in messages[::-1]:
+        try:
+            if count > 2500:
+                return
+            if True or message["sender_name"][0] == target:
+                print(str(count) + " " + message["sender_name"][0] + ": " + message["content"])
+                count += 1
+        except UnicodeEncodeError:
+            word = "ENCODE ERROR"
+            print("UNICODE-ERR | " + str(count))
+
 
 
 def filter_freq(freq, thresh):
@@ -94,9 +114,34 @@ def report_metadata(messages, freq, should_print=True):
     pretty_print_freq(filtered)
 
 
+def write_to_csv(messages):
+    """
+    prep csv for gcp auto ml
+    """
+    with open('conversation.csv', mode='w') as employee_file:
+        conversation_csv = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+        success, fail = 0, 0
+        for message in messages[::-1]:
+            content = message["content"]
+            sender_name = message["sender_name"][0]
+            try:
+                conversation_csv.writerow([content, sender_name])
+                success += 1
+            except:
+                print("UNICODE-ERR")
+                fail += 1
+        print("success: " + str(success))
+        print("fail: " + str(fail))
+
+
+
+
 if __name__== "__main__":
     messages = read_data()
-    freq_one = calc_frequency(messages, "W")
-    freq_two = calc_frequency(messages, "J")
-    report_metadata(messages, freq_one)
-    report_metadata(messages, freq_two)
+    write_to_csv(messages)
+    # freq_one = calc_frequency(messages, "W")
+    # freq_two = calc_frequency(messages, "J")
+    # report_metadata(messages, freq_one)
+    # report_metadata(messages, freq_two)
+    # print_messages(messages, "W")
