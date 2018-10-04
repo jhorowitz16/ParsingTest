@@ -118,11 +118,15 @@ def write_to_csv(messages):
     """
     prep csv for gcp auto ml
     """
+
+    MAX_COUNT = 100
+    success, fail = 0, 0
     with open('conversation.csv', mode='w') as employee_file:
         conversation_csv = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-        success, fail = 0, 0
         for message in messages[::-1]:
+            # if success > MAX_COUNT:
+            #     return
             content = message["content"]
             sender_name = message["sender_name"][0]
             try:
@@ -131,8 +135,8 @@ def write_to_csv(messages):
             except:
                 print("UNICODE-ERR")
                 fail += 1
-        print("success: " + str(success))
-        print("fail: " + str(fail))
+    print("success: " + str(success))
+    print("fail: " + str(fail))
 
 
 
