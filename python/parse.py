@@ -21,8 +21,11 @@ def filter_data(messages):
     new_messages = []
     for msg in messages:
         try:
-            new_messages.append(utils.filter_msg(msg))
+            filtered = utils.filter_msg(msg)
+            if filtered:
+                new_messages.append(filtered)
         except TypeError:
+            print(msg)
             pdb.set_trace()
     return new_messages
 
@@ -54,7 +57,7 @@ def print_messages(messages, target):
     count = 0
     for message in messages[::-1]:
         try:
-            if count > 2500:
+            if count > 250:
                 return
             if True or message["sender_name"][0] == target:
                 print(str(count) + " " + message["sender_name"][0] + ": " + message["content"])
@@ -201,8 +204,7 @@ def text_based_histogram(keys, values, bucket_size, max_pound_signs):
 
 
 if __name__== "__main__":
-    messages = read_data()
-    messages = filter_data(messages)
+    messages = filter_data(read_data())
     print_messages(messages, "J")
     # word_lengths = calc_msg_lengths(messages, "J")
     # print(word_lengths[0].keys())
