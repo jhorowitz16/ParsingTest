@@ -175,7 +175,8 @@ def calc_msg_lengths(messages, target):
     return lengths_target, lengths_other
 
 
-def text_based_histogram(keys, values, bucket_size, max_pound_signs):
+def text_based_histogram(keys, values, bucket_size, max_pound_signs,
+    title='===='):
     """
     1 - 3  ##########
     4 - 6  ################
@@ -189,31 +190,69 @@ def text_based_histogram(keys, values, bucket_size, max_pound_signs):
 
     4 numbers bucket 2 --> 2 by 2
     5 numbers bucket 2 --> 2 by 2 then everything else
+
+    add up all the values in the bucket
+    normalize later
     """
 
-    most_frequent = max(values)
-    pound_ratio = 1.0 * max_pound_signs / most_frequent
+    # setup
     histogram = {}
+    bucket_vals = []
 
-    for i in range(len(keys) / bucket_size):
-        histogram[(keys[i], keys[i])] = \
-            1.0 * values[i] * pound_ratio * max_pound_signs
+    for i in range((len(keys) - bucket_size) / bucket_size):
+        idx = bucket_size * i
+        bucket_val = 0
+        for j in range(idx, idx + bucket_size):
+            bucket_val += values[j]
+        bucket_vals.append(bucket_val)
 
+    # normalize so that the largest bucket has the max pound signs
+    pound_ratio = 1.0 * max_pound_signs / max(bucket_vals)
+
+    for i in range((len(keys) - bucket_size) / bucket_size):
+        idx = bucket_size * i
+        histogram[(keys[idx], keys[idx + bucket_size - 1])] = \
+            1.0 * bucket_vals[i] * pound_ratio
+
+    print(title)
+
+    # print nonzero (3 digits)
     for key, val in sorted(histogram.items()):
-        print(str(key) + " | " + str(val))
+        if int(val):
+            pounds = '#' * int(val)
+            key_str = ' ' * (3 - len(str(key[0]))) + str(key[0])
+            key_str += ' to '
+            key_str += ' ' * (3 - len(str(key[1]))) + str(key[1])
+            print(key_str + " | " + pounds)
+
+
+
+def demos(demo):
+    """
+    run something demoable lol
+    everything is based on messages
+    """
+    messages = filter_data(read_data())
+
+    if demo == "histograms":
+        word_lengths = calc_msg_lengths(messages, "J")
+        text_based_histogram(word_lengths[0].keys(), word_lengths[0].values(), 5, 25, "============= J =============")
+        text_based_histogram(word_lengths[1].keys(), word_lengths[1].values(), 5, 25, "============= W =============")
+
+    elif demo == "print":
+        print_messages(messages, "J")
+        print_messages(messages, "W")
+
+    elif demo == "frequencies":
+        write_to_csv(messages)
+        freq_one = calc_frequency(messages, "W")
+        freq_two = calc_frequency(messages, "J")
+        report_metadata(messages, freq_one)
+        report_metadata(messages, freq_two)
+        print_messages(messages, "W")
+
+
 
 
 if __name__== "__main__":
-    messages = filter_data(read_data())
-    print_messages(messages, "J")
-    # word_lengths = calc_msg_lengths(messages, "J")
-    # print(word_lengths[0].keys())
-    # print(word_lengths[1].keys())
-    # text_based_histogram(word_lengths[0].keys(), word_lengths[0].values(), 1, 150)
-
-    # write_to_csv(messages)
-    # freq_one = calc_frequency(messages, "W")
-    # freq_two = calc_frequency(messages, "J")
-    # report_metadata(messages, freq_one)
-    # report_metadata(messages, freq_two)
-    # print_messages(messages, "W")
+    demos("histograms")
