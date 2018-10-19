@@ -4,6 +4,7 @@ import pdb
 import csv
 
 import utils
+import datetime
 
 # sys.stdout = open('output.txt', 'w')
 
@@ -226,6 +227,20 @@ def text_based_histogram(keys, values, bucket_size, max_pound_signs,
             print(key_str + " | " + pounds)
 
 
+def hour_cluster(messages):
+    """
+    create 24 buckets and count the messages in each one
+    hour is the index in the list
+    returns a 24 element list
+
+    """
+    buckets = [0 for _ in range(24)]
+    for message in messages:
+        time = utils.get_time(message)
+        hour = time.hour
+        buckets[hour] += 1
+    return buckets
+
 
 def demos(demo):
     """
@@ -251,8 +266,11 @@ def demos(demo):
         report_metadata(messages, freq_two)
         print_messages(messages, "W")
 
+    elif demo == "time":
+        print(hour_cluster(messages))
+
 
 
 
 if __name__== "__main__":
-    demos("histograms")
+    demos("time")

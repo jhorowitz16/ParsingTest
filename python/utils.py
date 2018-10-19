@@ -1,4 +1,6 @@
 import re
+import datetime
+
 
 def print_messages(messages, target):
     """
@@ -35,3 +37,18 @@ def filter_msg(msg):
         re.match("http", content):
         return None
     return msg
+
+
+def to_time(ms_stamp):
+    """
+    take a 13 digit timestamp in ms and convert to a date time object
+    """
+    return datetime.datetime.fromtimestamp(ms_stamp // 1000)
+
+def get_time(msg):
+    """
+    get the time from a message
+    """
+    timestamp = msg["timestamp_ms"]
+    time = to_time(timestamp)
+    return time
