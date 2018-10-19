@@ -8,9 +8,10 @@ import datetime
 
 # sys.stdout = open('output.txt', 'w')
 
+FILENAME = "../../data/message-10-19.json"
 
 def read_data():
-    with open("../../data/message.json", "r") as read_file:
+    with open(FILENAME, "r") as read_file:
         data = json.load(read_file, encoding='utf-8')
         return data["messages"]
 
@@ -139,8 +140,8 @@ def write_to_csv(messages):
 
     MAX_COUNT = 100
     success, fail = 0, 0
-    with open('conversation.csv', mode='w') as employee_file:
-        conversation_csv = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    with open('../conversation.csv', mode='w') as csv_file:
+        conversation_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
         for message in messages[::-1]:
             # if success > MAX_COUNT:
@@ -155,6 +156,22 @@ def write_to_csv(messages):
                 fail += 1
     print("success: " + str(success))
     print("fail: " + str(fail))
+
+def write_time_to_csv(times):
+    """
+    prep spreadsheet for message distribution
+    take a list of integers and generate a table
+    0,value
+    1,value
+    ...
+    23,value
+    """
+
+    with open('../times.csv', mode='w') as csv_file:
+        times_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+        for i in range(len(times)):
+            times_csv.writerow([str(i) + ":00", times[i]])
 
 
 def calc_msg_lengths(messages, target):
@@ -267,7 +284,8 @@ def demos(demo):
         print_messages(messages, "W")
 
     elif demo == "time":
-        print(hour_cluster(messages))
+        times = hour_cluster(messages)
+        write_time_to_csv(times)
 
 
 
