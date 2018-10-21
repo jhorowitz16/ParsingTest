@@ -197,7 +197,7 @@ def write_time_to_csv(times):
             times_csv.writerow([str(i) + ":00", times[i]])
 
 
-def write_all_times_to_csv(times):
+def write_all_times_to_csv(times, isCombined=True):
     """
     write all the times by person by minute instead of hour
     no clustering
@@ -205,9 +205,13 @@ def write_all_times_to_csv(times):
 
     with open('../weekday_times.csv', mode='w') as csv_file:
         times_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
         word = "MTWHFSN"
-        times_csv.writerow(["PST"] + [c + '-J' for c in word] + [c + '-W' for c in word])
+
+        if isCombined:
+            times_csv.writerow(["PST"] + [c for c in word])
+        else:
+            times_csv.writerow(["PST"] + [c + '-J' for c in word] + [c + '-W' for c in word])
+
         for i in range(len(times)):
             times_csv.writerow([str(i) + ":00"] + times[i])
 
@@ -309,24 +313,34 @@ def hour_cluster(messages, target=None):
     return buckets
 
 
-def week_hour_cluster(messages, target):
+def week_hour_cluster(messages, target=None):
     """
     hour maps to 2 lists by days of the week
         M  T  W  H  F  S  N  M  T  W  H  F  S  N
     H, [#, #, #, #, #, #, #, #, #, #, #, #, #, #]
+    combine if no target
     """
-    buckets = [[0 for _ in range(14)] for _ in range(24)]
-
+    if target:
+        buckets = [[0 for _ in range(14)] for _ in range(24)]
+    else:
+        buckets = [[0 for _ in range(7)] for _ in range(24)]
 
     for message in messages:
         time = utils.get_time(message)
         hour = time.hour
         day = time.weekday()
-        if target == message["sender_name"][0]:
+        if not target or target == message["sender_name"][0]:
             buckets[hour][day] += 1
         else:
             buckets[hour][7 + day] += 1
-    return buckets
+
+    if target:
+        return buckets
+    else:
+        combined = []
+        for i in range(7):
+            combined.append(buckets[i] + buckets[i + 7])
+        return combined
 
 
 def write_day_of_week_to_csv(week):
@@ -367,7 +381,7 @@ def demos(demo):
         write_time_and_person_to_csv(times, "J")
 
     elif demo == "day":
-        times = week_hour_cluster(messages, "J")
+        times = week_hour_cluster(messages, )
         write_all_times_to_csv(times)
 
 
