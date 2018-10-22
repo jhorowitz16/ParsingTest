@@ -334,22 +334,7 @@ def week_hour_cluster(messages, target=None):
         else:
             buckets[hour][7 + day] += 1
 
-    if target:
-        return buckets
-    else:
-        combined = []
-        for i in range(7):
-            combined.append(buckets[i] + buckets[i + 7])
-        return combined
-
-
-def write_day_of_week_to_csv(week):
-    """
-    take a list of 7 tuples and write them
-    weekday >>>
-    Return the day of the week as an integer, where Monday is 0 and Sunday is 6
-    """
-
+    return buckets
 
 
 def demos(demo):
@@ -381,7 +366,7 @@ def demos(demo):
         write_time_and_person_to_csv(times, "J")
 
     elif demo == "day":
-        times = week_hour_cluster(messages, )
+        times = week_hour_cluster(messages)
         write_all_times_to_csv(times)
 
 
