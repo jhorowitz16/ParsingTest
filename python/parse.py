@@ -61,7 +61,7 @@ def print_messages(messages, target):
         try:
             if count > 250:
                 return
-            if True or message["sender_name"][0] == target:
+            if message["sender_name"][0] == target:
                 print(str(count) + " " + message["sender_name"][0] + ": " + message["content"])
                 count += 1
         except UnicodeEncodeError:
@@ -93,9 +93,7 @@ def pretty_print_freq(freq):
     print with extra spaces a word frequency table
     crop strings that are too long, and add spaces for short ones
     """
-
     TARGET = 11
-
     print("================================")
     for word, value in sorted(freq.items(), key=lambda(x): -1 *x[1]):
         n = len(word)
@@ -105,16 +103,7 @@ def pretty_print_freq(freq):
             except UnicodeEncodeError:
                 word = "ENCODE ERROR"
                 print("UNICODE-ERR | " + str(value))
-
     print("================================")
-
-
-def generate_word_cloud(freq):
-    """
-    get the format the wordcloud is looking for
-
-    """
-    pass
 
 
 def report_metadata(messages, freq, should_print=True):
@@ -144,8 +133,6 @@ def write_to_csv(messages):
         conversation_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
         for message in messages[::-1]:
-            # if success > MAX_COUNT:
-            #     return
             content = message["content"]
             sender_name = message["sender_name"][0]
             try:
@@ -374,4 +361,4 @@ def demos(demo):
 
 
 if __name__== "__main__":
-    demos("day")
+    demos("print")
