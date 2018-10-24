@@ -8,7 +8,7 @@ import datetime
 
 # sys.stdout = open('output.txt', 'w')
 
-FILENAME = "../../data/message-10-19.json"
+FILENAME = "../../data/message.json"
 
 def read_data():
     with open(FILENAME, "r") as read_file:
