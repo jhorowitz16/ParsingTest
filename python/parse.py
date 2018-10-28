@@ -59,7 +59,7 @@ def print_messages(messages, target):
     count = 0
     for message in messages[::-1]:
         try:
-            if count > 250:
+            if count > 1050:
                 return
             if message["sender_name"][0] == target:
                 print(str(count) + " " + message["sender_name"][0] + ": " + message["content"])
@@ -106,18 +106,17 @@ def pretty_print_freq(freq):
     print("================================")
 
 
-def report_metadata(messages, freq, should_print=True):
+def report_metadata(messages, freq, should_print=True, threshhold=0):
     """
     this prints out the metadata from the messages, frequency dictionary
     """
 
-    THRESH = 200
-    filtered, ratio= filter_freq(freq, 100)
+    filtered, ratio= filter_freq(freq, threshhold)
 
     print("message count: " + str(len(messages)))
     print("total unique words: " + str(len(freq)))
     print("unique words appearing > " \
-        + str(THRESH) + " times: " + str(len(filtered)))
+        + str(threshhold) + " times: " + str(len(filtered)))
     print("ratio: " + str(ratio))
     pretty_print_freq(filtered)
 
@@ -324,6 +323,18 @@ def week_hour_cluster(messages, target=None):
     return buckets
 
 
+def count_suffix(frequencies, suffix='z'):
+    """
+    filter by the suffix
+    return the new dictionary
+    """
+    filtered = {}
+    for key, value in frequencies.items():
+        if key[-1].lower() == suffix.lower():
+            utils.dput(filtered, key, value)
+    return filtered
+
+
 def demos(demo):
     """
     run something demoable lol
@@ -348,6 +359,14 @@ def demos(demo):
         report_metadata(messages, freq_two)
         print_messages(messages, "W")
 
+    elif demo == "freq_z":
+        freq_one = calc_frequency(messages, "W")
+        freq_two = calc_frequency(messages, "J")
+        filtered_one = count_suffix(freq_one, "Z")
+        filtered_two = count_suffix(freq_two, "Z")
+        report_metadata(messages, filtered_one)
+        report_metadata(messages, filtered_two)
+
     elif demo == "time":
         times = hour_cluster(messages, "J")
         write_time_and_person_to_csv(times, "J")
@@ -361,4 +380,4 @@ def demos(demo):
 
 
 if __name__== "__main__":
-    demos("print")
+    demos("freq_z")

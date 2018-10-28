@@ -14,14 +14,14 @@ def print_messages(messages, target):
     print(count)
 
 
-def dput(d, key):
+def dput(d, key, value=1):
     """
     increment the count of the value at the specific key, or create a new key
     """
     if key in d:
-        d[key] += 1
+        d[key] += value
     else:
-        d[key] = 1
+        d[key] = value
 
 
 def filter_msg(msg):
