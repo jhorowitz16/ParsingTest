@@ -335,6 +335,32 @@ def count_suffix(frequencies, suffix='z'):
     return filtered
 
 
+def write_z_to_csv(freqs, labels):
+    """
+    [freq_one, freq_two]
+    [let, let]
+         L L
+    word N M
+    word N M
+    """
+    combined = {}
+    for key, value in freqs[0].items():
+        combined[key] = [value, 0]
+    for key, value in freqs[1].items():
+        if key in combined:
+            combined[key] =  [combined[key][0], value]
+        else:
+            combined[key] = [0, value]
+
+    keys = sorted(combined.keys(),key=lambda(x):-1 * sum(combined[x]))
+
+    with open('../freq_z.csv', mode='w') as csv_file:
+        freq_z_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        freq_z_csv.writerow(["artZ", labels[0], labels[1], "Total"])
+
+        for key in keys:
+            freq_z_csv.writerow([key, combined[key][0], combined[key][1], combined[key][0] + combined[key][1]])
+
 def demos(demo):
     """
     run something demoable lol
@@ -366,6 +392,7 @@ def demos(demo):
         filtered_two = count_suffix(freq_two, "Z")
         report_metadata(messages, filtered_one)
         report_metadata(messages, filtered_two)
+        write_z_to_csv([filtered_one, filtered_two], ["W", "J"])
 
     elif demo == "time":
         times = hour_cluster(messages, "J")
@@ -374,9 +401,6 @@ def demos(demo):
     elif demo == "day":
         times = week_hour_cluster(messages)
         write_all_times_to_csv(times)
-
-
-
 
 
 if __name__== "__main__":
