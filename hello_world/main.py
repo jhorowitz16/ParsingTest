@@ -18,6 +18,8 @@ from google.appengine.ext.webapp import template
 import sys
 
 from google.appengine.api import urlfetch
+import urllib
+import logging
 
 
 # from google.cloud import automl_v1beta1
@@ -30,7 +32,21 @@ class MainPage(webapp2.RequestHandler):
         # self.response.write('<h1>Hello friend</h1><input type="text"/><button>Submit</button>')
 
         url = 'http://www.google.com/humans.txt'
+
+        form_fields = {
+            'textSnippet': {
+                'content': 'hello friend',
+                'mime_type': 'text/plain'
+            }
+        }
+
+
         try:
+            form_data = urllib.urlencode(form_fields)
+            headers = {
+                'Authorization': 'Bearer ya29.c.ElpHBv2Dcb5YGafctSCmJk1E8Cy_RVuO2sCEB7-GmUKXakkH4GfC-1p-oIy7Qa65D8UC0G2uS2Nf4pGH1i1pAywEhodTPhPJGsRcEpHMUIlf-Mro2RlND_gUvyc',
+                'Content-Type': 'application/json'
+                }
             result = urlfetch.fetch(url)
             if result.status_code == 200:
                 self.response.write(result.content)
