@@ -17,8 +17,11 @@ import os
 from google.appengine.ext.webapp import template
 import sys
 
-from google.cloud import automl_v1beta1
-from google.cloud.automl_v1beta1.proto import service_pb2
+from google.appengine.api import urlfetch
+
+
+# from google.cloud import automl_v1beta1
+# from google.cloud.automl_v1beta1.proto import service_pb2
 
 
 class MainPage(webapp2.RequestHandler):
@@ -26,8 +29,18 @@ class MainPage(webapp2.RequestHandler):
         # self.response.headers['Content-Type'] = 'text/plain'
         # self.response.write('<h1>Hello friend</h1><input type="text"/><button>Submit</button>')
 
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
-        self.response.out.write(template.render(path, {}))
+        url = 'http://www.google.com/humans.txt'
+        try:
+            result = urlfetch.fetch(url)
+            if result.status_code == 200:
+                self.response.write(result.content)
+            else:
+                self.response.status_code = result.status_code
+        except urlfetch.Error:
+            logging.exception('Caught exception fetching url')
+
+        # path = os.path.join(os.path.dirname(__file__), 'index.html')
+        # self.response.out.write(template.render(path, {}))
 
 
 app = webapp2.WSGIApplication([
