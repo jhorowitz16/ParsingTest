@@ -45,6 +45,15 @@ def to_time(ms_stamp):
     """
     return datetime.datetime.fromtimestamp(ms_stamp // 1000)
 
+def to_day_shift(ms_stamp):
+    """
+    get the day which begins at 5:00am PST
+    5:00am is the new day
+    """
+    date = datetime.datetime.fromtimestamp(ms_stamp // 1000)
+    shifted_date = date - datetime.timedelta(hours=5)
+    return shifted_date
+
 def get_time(msg):
     """
     get the time from a message
@@ -52,3 +61,12 @@ def get_time(msg):
     timestamp = msg["timestamp_ms"]
     time = to_time(timestamp)
     return time
+
+def test_to_day_shift(messages):
+    """
+    backup a simple test
+    """
+    for msg in messages[:1000]:
+        timestamp = msg["timestamp_ms"]
+        time = utils.get_time(msg)
+        print(str(time) + " " + str(utils.to_day_shift(timestamp)))

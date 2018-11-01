@@ -8,7 +8,7 @@ import datetime
 
 # sys.stdout = open('output.txt', 'w')
 
-FILENAME = "../../data/message.json"
+FILENAME = "../../data/message-10-31.json"
 
 def read_data():
     with open(FILENAME, "r") as read_file:
@@ -28,7 +28,6 @@ def filter_data(messages):
                 new_messages.append(filtered)
         except TypeError:
             print(msg)
-            pdb.set_trace()
     return new_messages
 
 
@@ -361,6 +360,46 @@ def write_z_to_csv(freqs, labels):
         for key in keys:
             freq_z_csv.writerow([key, combined[key][0], combined[key][1], combined[key][0] + combined[key][1]])
 
+
+def calc_count_by_day(messages):
+    """
+    cut off the day at the lowest frequency
+    get a list of days followed by number of messages
+    also label each day with the day of the week
+
+    list of tuples (can be zeros)
+        (date object, count)
+    date object is based on the first day
+    hash in the form 07/07/18
+    """
+    counts = {}
+    for msg in messages:
+        timestamp = msg["timestamp_ms"]
+        date = utils.to_day_shift(timestamp)
+        formatted_date = date.strftime("%x")
+        utils.dput(counts, formatted_date)
+
+    sorted_keys = sorted(counts.keys())
+    # for key in sorted_keys:
+    #     print(key + " " + str(counts[key]))
+
+    return [(key, counts[key]) for key in sorted_keys]
+
+
+def write_all_count_by_day_to_csv(counts):
+    """
+    date | count
+    simple 2 column
+    """
+    with open('../counts_by_day.csv', mode='w') as csv_file:
+        counts_by_day_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        counts_by_day_csv.writerow(["Day", "Total Message Count, (cutoff 5:00am PST)"])
+
+        for count in counts:
+            counts_by_day_csv.writerow([count[0], count[1]])
+
+
+
 def demos(demo):
     """
     run something demoable lol
@@ -402,6 +441,11 @@ def demos(demo):
         times = week_hour_cluster(messages)
         write_all_times_to_csv(times)
 
+    elif demo == "lapse":
+        count_by_day = calc_count_by_day(messages)
+        print(count_by_day)
+        write_all_count_by_day_to_csv(count_by_day)
+
 
 if __name__== "__main__":
-    demos("freq_z")
+    demos("lapse")
