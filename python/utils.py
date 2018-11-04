@@ -22,6 +22,16 @@ def dput(d, key, value=1):
         d[key] += value
     else:
         d[key] = value
+        
+
+def dput_list(d, key, value):
+    """
+    dput but append value to the end of the list
+    """
+    if key in d:
+        d[key] = d[key] + [value]
+    else:
+        d[key] = [value]
 
 
 def filter_msg(msg):

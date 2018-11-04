@@ -8,7 +8,8 @@ import datetime
 
 # sys.stdout = open('output.txt', 'w')
 
-FILENAME = "../../data/message-10-31.json"
+# FILENAME = "../../data/message-10-31.json"
+FILENAME = "../../data/mocked-message.json"
 
 def read_data():
     with open(FILENAME, "r") as read_file:
@@ -409,6 +410,59 @@ def write_all_count_by_day_to_csv(counts):
             counts_by_day_csv.writerow([count[0], count[1]])
 
 
+def get_unique_messages(messages, target, other):
+    """
+    only include messages that are unique to one person
+    two buckets (dictionaries)
+    add tuples (message, [list time object formatted as string]))
+    message keys (easy to search), values are the list of time objects
+    target then non target
+
+    the both set is for words used by both people ... might use this later
+    """
+
+    target_dict = dict()
+    other_dict = dict()
+    both_dict = dict()
+
+    for msg in messages:
+        content = msg["content"]
+        sender = msg["sender_name"][0]
+        time = utils.get_time(msg)
+
+        if content in both_dict:
+            both_dict[content].append((sender, time))
+            continue
+
+        # use references to the two buckets to avoid repeating code
+        curr_bucket, other_bucket = None, None
+        if sender == target:
+            curr_bucket = target_dict
+            other_bucket = other_dict
+        else:
+            curr_bucket = other_dict
+            other_bucket = target_dict
+
+
+        if (content in other_bucket):
+            # flush the content out of the other_bucket
+            # add it to the both set
+            popped = other_bucket.pop(content)  # this is a list of times
+            for popped_time in popped:
+                utils.dput_list(both_dict, content, (other, popped_time))
+            utils.dput_list(both_dict, content, (sender, time))
+        else:
+            # go ahead and add it to curr_bucket
+            utils.dput_list(curr_bucket, content, time)
+
+    return target_dict, other_dict, both_dict
+
+
+
+
+
+
+
 
 def demos(demo):
     """
@@ -456,10 +510,17 @@ def demos(demo):
         print(count_by_day)
         write_all_count_by_day_to_csv(count_by_day)
 
-    # elif demo == "links":
-    #     links = get_links(messages)
-    #     write_all_links_to_csv(links)
+    elif demo == "links":
+        links = get_links(messages)
+        for link in links:
+            print(link)
+
+    elif demo == "unique":
+        unique_msg_buckets = get_unique_messages(messages, "J", "W")
+        for bucket in unique_msg_buckets:
+            print(str(bucket) + '\n')
+        # write_messages_to_csv(unique_msgs)
 
 
 if __name__== "__main__":
-    demos("print")
+    demos("unique")
