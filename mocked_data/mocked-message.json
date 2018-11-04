@@ -1,0 +1,106 @@
+{
+  "participants": [
+    {
+      "name": "W"
+    },
+    {
+      "name": "J"
+    }
+  ],
+  "messages": [
+    {
+      "sender_name": "W",
+      "timestamp_ms": 1539654699012,
+      "content": "one one one",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654664417,
+      "content": "one one one",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654660754,
+      "content": "two two two",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654650290,
+      "content": "four four four",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654647311,
+      "content": "two two two",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654643597,
+      "content": "two two two",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "W",
+      "timestamp_ms": 1539654605453,
+      "content": "five five five",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "W",
+      "timestamp_ms": 1539654598370,
+      "content": "three three three",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "W",
+      "timestamp_ms": 1539654558323,
+      "content": "three three three",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654537313,
+      "content": "one one one",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654535670,
+      "content": "one one one",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654530939,
+      "content": "two two two",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "W",
+      "timestamp_ms": 1539654528061,
+      "content": "three three three",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "J",
+      "timestamp_ms": 1539654524066,
+      "content": "one one one",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "W",
+      "timestamp_ms": 1531028005835,
+      "content": "one one one",
+      "type": "Generic"
+    }
+  ],
+  "title": "W",
+  "is_still_participant": true,
+  "thread_type": "Regular",
+  "thread_path": "W_352d470d4b"
+}
