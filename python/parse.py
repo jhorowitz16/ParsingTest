@@ -58,7 +58,7 @@ def print_messages(messages, target):
     count = 0
     for message in messages[::-1]:
         try:
-            if count > 1050:
+            if count > 999999:
                 return
             if message["sender_name"][0] == target:
                 print(str(count) + " " + message["sender_name"][0] + ": " + message["content"])
@@ -361,6 +361,16 @@ def write_z_to_csv(freqs, labels):
             freq_z_csv.writerow([key, combined[key][0], combined[key][1], combined[key][0] + combined[key][1]])
 
 
+def get_links(raw_messages):
+    """
+    go through the raw messages
+    ... and print messages that look like links
+    along with the sender_name and timestamp
+    """
+    for message in raw_messages:
+        pass
+
+
 def calc_count_by_day(messages):
     """
     cut off the day at the lowest frequency
@@ -393,7 +403,7 @@ def write_all_count_by_day_to_csv(counts):
     """
     with open('../counts_by_day.csv', mode='w') as csv_file:
         counts_by_day_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        counts_by_day_csv.writerow(["Day", "Total Message Count, (cutoff 5:00am PST)"])
+        counts_by_day_csv.writerow(["Day", "Total Message Count", "(cutoff 5:00am PST)"])
 
         for count in counts:
             counts_by_day_csv.writerow([count[0], count[1]])
@@ -446,6 +456,10 @@ def demos(demo):
         print(count_by_day)
         write_all_count_by_day_to_csv(count_by_day)
 
+    # elif demo == "links":
+    #     links = get_links(messages)
+    #     write_all_links_to_csv(links)
+
 
 if __name__== "__main__":
-    demos("lapse")
+    demos("print")
