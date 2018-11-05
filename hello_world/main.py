@@ -40,14 +40,21 @@ class MainPage(webapp2.RequestHandler):
             }
         }
 
+        url = 'https://automl.googleapis.com/v1beta1/projects/confident-trail-214602/locations/us-central1/models/TCN5019025096457053612:predict'
 
         try:
             form_data = urllib.urlencode(form_fields)
+            form_data = 'textSnippet%3A%20%7B%22content%22%3A%20%22YOUR%20TEXT%20HERE%22%2C%22mime_type%22%3A%20%22text%2Fplain%22%20%7D'
             headers = {
-                'Authorization': 'Bearer ya29.c.ElpHBv2Dcb5YGafctSCmJk1E8Cy_RVuO2sCEB7-GmUKXakkH4GfC-1p-oIy7Qa65D8UC0G2uS2Nf4pGH1i1pAywEhodTPhPJGsRcEpHMUIlf-Mro2RlND_gUvyc',
+                'Authorization': 'Bearer ya29.c.ElpHBimhOCsmYiSMJRHHctXEfVsHYe8VhQYwvECTXtBPo4_vNLoHE3OvumiywKV2Odt1_ZLtAxT5jsCH8lcJpWYT7HcGWKaeT_6a7f2smzEKJJ7ZEZmrMS9w5dY',
                 'Content-Type': 'application/json'
                 }
-            result = urlfetch.fetch(url)
+            # result = urlfetch.fetch(url)
+            result = urlfetch.fetch(
+                url=url,
+                payload=form_data,
+                method=urlfetch.POST,
+                headers=headers)
             if result.status_code == 200:
                 self.response.write(result.content)
             else:

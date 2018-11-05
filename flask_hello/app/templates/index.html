@@ -1,0 +1,17 @@
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }}</title>
+        {% else %}
+        <title></title>
+        {% endif %}
+    </head>
+    <body>
+        {% if data %}
+        <h1>{{ data.message }}</h1>
+        <h2>{{ data.answer }}</h2>
+        {% else %}
+        <h1>no message</h1>
+        {% endif %}
+    </body>
+</html>

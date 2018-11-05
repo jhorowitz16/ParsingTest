@@ -8,8 +8,8 @@ import datetime
 
 # sys.stdout = open('output.txt', 'w')
 
-# FILENAME = "../../data/message-10-31.json"
-FILENAME = "../../data/mocked-message.json"
+FILENAME = "../../data/message-10-31.json"
+MOCKED = "../../data/mocked-message.json"
 
 def read_data():
     with open(FILENAME, "r") as read_file:
@@ -458,9 +458,33 @@ def get_unique_messages(messages, target, other):
     return target_dict, other_dict, both_dict
 
 
+def write_messages_to_csv(unique_msg_buckets, labels):
+    """
+    pretty print the buckets
+    could do ...
+    the first two buckets:
+        key, count, (maybe time, time ... )
+    last bucket (both)
+        key, count J, count W
+    sort the words
 
+    but for now just list all the words, sets of 10
+    """
+    for i in range(2):
+        words = unique_msg_buckets[i].keys()
+        total = len(words)
+        filename = '../' + labels[i] + '_unique_words.csv'
+        with open(filename, mode='w') as csv_file:
+            unique_words_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            unique_words_csv.writerow(["unique words phrase", "count", "TOTAL: " + str(total), labels[i]])
 
-
+            for i in range(total // 10):
+                idx = 10 * i
+                row = words[idx:idx+10]
+                try:
+                    unique_words_csv.writerow(row)
+                except UnicodeEncodeError:
+                    pass
 
 
 
@@ -518,8 +542,15 @@ def demos(demo):
     elif demo == "unique":
         unique_msg_buckets = get_unique_messages(messages, "J", "W")
         for bucket in unique_msg_buckets:
-            print(str(bucket) + '\n')
-        # write_messages_to_csv(unique_msgs)
+            print(str(len(bucket)) + '\n')
+        keys = unique_msg_buckets[2].keys()
+
+        combined = "============= \n"
+
+        for key in keys:
+            combined += key + "    "
+        print(combined)
+        write_messages_to_csv(unique_msg_buckets, ["J", "W"])
 
 
 if __name__== "__main__":
