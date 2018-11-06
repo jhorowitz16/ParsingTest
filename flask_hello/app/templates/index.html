@@ -1,5 +1,7 @@
 <html>
     <head>
+        <link href="{{ url_for('static', filename='home.css') }}" />
+
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
@@ -9,9 +11,18 @@
     <body>
         {% if data %}
         <h1>{{ data.message }}</h1>
-        <h2>{{ data.answer }}</h2>
         {% else %}
         <h1>no message</h1>
         {% endif %}
+
+        <button>J</button>
+        <button>W</button>
+
+        <h2>{{ data.answer }}</h2>
+
+        <div>
+          score: {{ score }}
+        </div>
+
     </body>
 </html>

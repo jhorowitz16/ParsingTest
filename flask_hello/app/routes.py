@@ -5,24 +5,32 @@ from random import random
 
 
 totals = [0, 0]
+score = [0, 0]
 
 @app.route('/')
 @app.route('/index')
 def index():
     data = select_random()
-    return render_template('index.html', title='Guess the Message', data=data)
+    return render_template(
+        'index.html', title='Guess the Message', data=data, score=get_score())
 
 @app.route('/w')
 @app.route('/W')
 def index_w():
     rand_message = select_random(W_rows)
-    return render_template('index.html', title='W Only', msg=rand_message)
+    return render_template(
+        'index.html', title='W Only', msg=rand_message, score=get_score())
 
 @app.route('/J')
 @app.route('/j')
 def index_j():
     rand_message = select_random(J_rows)
-    return render_template('index.html', title='J Only', msg=rand_message)
+    return render_template(
+        'index.html', title='J Only', msg=rand_message, score=get_score())
+
+
+
+
 
 
 def read_csv(person):
@@ -59,6 +67,19 @@ def select_random(rows=None):
         'message': message,
         'answer': answer
     }
+
+def get_score():
+    """
+    return the string version of the score
+    0 out of 0 is the default
+    correct ouf of total questions
+    """
+    if sum(score) == 0:
+        return "N/A"
+    else:
+        return str(score[0]) + " correct out of " + str(score[1])
+
+
 
 
 J_rows = read_csv('J')
