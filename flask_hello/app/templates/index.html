@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link href="{{ url_for('static', filename='home.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}" />
 
         {% if title %}
         <title>{{ title }}</title>
@@ -9,20 +9,27 @@
         {% endif %}
     </head>
     <body>
-        {% if data %}
-        <h1>{{ data.message }}</h1>
-        {% else %}
-        <h1>no message</h1>
-        {% endif %}
-
-        <button>J</button>
-        <button>W</button>
-
-        <h2>{{ data.answer }}</h2>
-
-        <div>
-          score: {{ score }}
+      <div class="dashboard">
+        <div class="dashboard__message">
+          {% if data %}
+          <h1>{{ data.message }}</h1>
+          {% else %}
+          <h1>no message</h1>
+          {% endif %}
         </div>
 
+        <div class="dashboard__buttons">
+          <button class="button button--green">J</button>
+          <button class="button button--red">W</button>
+        </div>
+
+        <div class="dashboards__answer">
+          <h2>{{ data.answer }}</h2>
+        </div>
+
+        <div class="dashboards__score">
+          <h3>score: {{ score }}</h3>
+        </div>
+      </div>
     </body>
 </html>
