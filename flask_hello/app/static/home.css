@@ -24,16 +24,17 @@
 .dashboard__message {
   border: 3px solid black;
   background: beige;
+  padding: 0 16px;
 }
 
 .dashboard__buttons {
   flex-direction: row;
   display: flex;
   justify-content: space-around;
-  padding: 50px;
+  padding: 32px;
 }
 
-.dashboards__answer {
+.dashboard__answer {
   background: beige;
   width: 50%;
   margin: 0 auto;
@@ -41,4 +42,16 @@
   white-space: initial;
   border: 2px dashed black;
   text-align: center;
+}
+
+.dashboard__next {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.button--next {
+
 }
