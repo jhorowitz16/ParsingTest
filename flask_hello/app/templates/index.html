@@ -1,7 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}" />
-
+        <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
@@ -19,16 +19,16 @@
         </div>
 
         <div class="dashboard__buttons">
-          <button class="button button--green">J</button>
-          <button class="button button--red">W</button>
+          <button class="button button--green" onClick="checkAnswer('J')">J</button>
+          <button class="button button--red" onClick="checkAnswer('W')">W</button>
         </div>
 
         <div class="dashboards__answer">
-          <h2>{{ data.answer }}</h2>
+          <h2 id="answer">{{ data.answer }}</h2>
         </div>
 
         <div class="dashboards__score">
-          <h3>score: {{ score }}</h3>
+          <h3 id="score">score: {{ score }}</h3>
         </div>
       </div>
     </body>
