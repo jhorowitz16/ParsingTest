@@ -22,6 +22,7 @@ function checkAnswer(guess) {
 function next() {
   makeAnswerInvisible();
   enableButtons();
+  location.reload();
 }
 
 
@@ -32,6 +33,11 @@ function next() {
 function setScoreText() {
   const text = document.correct + " / " + document.total;
   document.getElementById("score").innerText = text;
+  // if (document.correct === 1) {
+  //   document.getElementById("answer").style.background = "green";
+  // } else {
+  //   document.getElementById("answer").style.background = "red";
+  // }
 }
 
 function makeAnswerVisible() {
