@@ -34,7 +34,7 @@ def index_j():
 
 
 def read_csv(person):
-    filename = '../' + person + '_unique_words.csv'
+    filename = 'app/static/' + person + '_unique_words.csv'
     rows = []
     with open(filename) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
