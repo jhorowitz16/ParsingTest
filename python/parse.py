@@ -16,11 +16,11 @@ def read_data():
         data = json.load(read_file, encoding='utf-8')
         return data["messages"]
 
+
 def filter_data(messages):
     """
     return a subset of messages that have the filterz
     """
-
     new_messages = []
     for msg in messages:
         try:
@@ -165,6 +165,7 @@ def write_time_and_person_to_csv(times, target=None):
             for i in range(len(times)):
                 times_csv.writerow([str(i) + ":00", times[i]])
 
+
 def write_time_to_csv(times):
     """
     prep spreadsheet for message distribution
@@ -188,7 +189,6 @@ def write_all_times_to_csv(times, isCombined=True):
     write all the times by person by minute instead of hour
     no clustering
     """
-
     with open('../weekday_times.csv', mode='w') as csv_file:
         times_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         word = "MTWHFSN"
@@ -200,7 +200,6 @@ def write_all_times_to_csv(times, isCombined=True):
 
         for i in range(len(times)):
             times_csv.writerow([str(i) + ":00"] + times[i])
-
 
 
 def calc_msg_lengths(messages, target):
@@ -241,7 +240,6 @@ def text_based_histogram(keys, values, bucket_size, max_pound_signs,
     add up all the values in the bucket
     normalize later
     """
-
     # setup
     histogram = {}
     bucket_vals = []
@@ -310,7 +308,6 @@ def week_hour_cluster(messages, target=None):
         buckets = [[0 for _ in range(14)] for _ in range(24)]
     else:
         buckets = [[0 for _ in range(7)] for _ in range(24)]
-
     for message in messages:
         time = utils.get_time(message)
         hour = time.hour
@@ -319,7 +316,6 @@ def week_hour_cluster(messages, target=None):
             buckets[hour][day] += 1
         else:
             buckets[hour][7 + day] += 1
-
     return buckets
 
 
@@ -360,16 +356,6 @@ def write_z_to_csv(freqs, labels):
 
         for key in keys:
             freq_z_csv.writerow([key, combined[key][0], combined[key][1], combined[key][0] + combined[key][1]])
-
-
-def get_links(raw_messages):
-    """
-    go through the raw messages
-    ... and print messages that look like links
-    along with the sender_name and timestamp
-    """
-    for message in raw_messages:
-        pass
 
 
 def calc_count_by_day(messages):
@@ -533,11 +519,6 @@ def demos(demo):
         count_by_day = calc_count_by_day(messages)
         print(count_by_day)
         write_all_count_by_day_to_csv(count_by_day)
-
-    elif demo == "links":
-        links = get_links(messages)
-        for link in links:
-            print(link)
 
     elif demo == "unique":
         unique_msg_buckets = get_unique_messages(messages, "J", "W")
