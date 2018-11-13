@@ -1,5 +1,12 @@
-document.correct = 0;
-document.total = 0;
+const cachedCorrect = storeGet('correct');
+const cachedTotal = storeGet('total');
+
+if (cachedCorrect === "undefined") {
+  localStorage.setItem('correct', 0);
+}
+if (cachedTotal === "undefined") {
+  localStorage.setItem('total', 0);
+}
 
 
 function checkAnswer(guess) {
@@ -8,11 +15,11 @@ function checkAnswer(guess) {
   console.log(answer);
   if (answer === guess) {
     console.log("correct");
-    document.correct += 1;
-    document.total += 1;
+    storeIncrement('correct');
+    storeIncrement('total');
   } else {
     console.log("wrong");
-    document.total += 1;
+    storeIncrement('total');
   }
   setScoreText();
   makeAnswerVisible();
@@ -31,13 +38,10 @@ function next() {
 /* ============================================= */
 
 function setScoreText() {
-  const text = document.correct + " / " + document.total;
+  const correct = localStorage.getItem('correct');
+  const total = localStorage.getItem('total');
+  const text = correct + " / " + total;
   document.getElementById("score").innerText = text;
-  // if (document.correct === 1) {
-  //   document.getElementById("answer").style.background = "green";
-  // } else {
-  //   document.getElementById("answer").style.background = "red";
-  // }
 }
 
 function makeAnswerVisible() {
@@ -57,3 +61,24 @@ function enableButtons() {
   document.getElementById("button--J").disabled = false;
   document.getElementById("button--W").disabled = false;
 }
+
+function storeGet(key) {
+  const cached = localStorage.getItem(key);
+  return (cached === "undefined") ? null : parseInt(cached);
+}
+
+function storeIncrement(key) {
+  const val = storeGet(key);
+  if (val) {
+    localStorage.setItem(key, val + 1)
+  } else {
+    localStorage.setItem(key, 1)
+  }
+}
+
+function resetLocalStorage() {
+    localStorage.setItem('correct', 0);
+    localStorage.setItem('total', 0);
+}
+
+window.onload = setStoreText;
