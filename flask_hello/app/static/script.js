@@ -1,15 +1,5 @@
-const cachedCorrect = storeGet('correct');
-const cachedTotal = storeGet('total');
-
-if (cachedCorrect === "undefined") {
-  localStorage.setItem('correct', 0);
-}
-if (cachedTotal === "undefined") {
-  localStorage.setItem('total', 0);
-}
-
-
 function checkAnswer(guess) {
+  initStorage();
   var answer = document.getElementById("answer").innerText;
   console.log(guess);
   console.log(answer);
@@ -64,7 +54,7 @@ function enableButtons() {
 
 function storeGet(key) {
   const cached = localStorage.getItem(key);
-  return (cached === "undefined") ? null : parseInt(cached);
+  return (cached === null) ? null : parseInt(cached);
 }
 
 function storeIncrement(key) {
@@ -81,4 +71,23 @@ function resetLocalStorage() {
     localStorage.setItem('total', 0);
 }
 
-window.onload = setStoreText;
+function initStorage() {
+  const cachedCorrect = storeGet('correct');
+  const cachedTotal = storeGet('total');
+
+  if (cachedCorrect === null) {
+    localStorage.setItem('correct', 0);
+  }
+  if (cachedTotal === null) {
+    localStorage.setItem('total', 0);
+  }
+}
+
+/* ============================================= */
+/* =================== PREP ==================== */
+/* ============================================= */
+
+initStorage();
+setScoreText();
+
+window.onload = setScoreText;

@@ -3,9 +3,9 @@ from app import app
 import csv
 from random import random
 
+
 totals = [0, 0]
 score = [0, 0]
-
 
 @app.route('/')
 @app.route('/index')
@@ -14,14 +14,12 @@ def index():
     return render_template(
         'index.html', title='Guess the Message', data=data, score=get_score())
 
-
 @app.route('/w')
 @app.route('/W')
 def index_w():
     rand_message = select_random(W_rows)
     return render_template(
         'index.html', title='W Only', msg=rand_message, score=get_score())
-
 
 @app.route('/J')
 @app.route('/j')
@@ -30,10 +28,6 @@ def index_j():
     return render_template(
         'index.html', title='J Only', msg=rand_message, score=get_score())
 
-
-@app.route('/greeting/<name>')
-def give_greeting(name):
-    return 'Hello, {0}!'.format(name)
 
 
 
@@ -48,7 +42,6 @@ def read_csv(person):
         for row in csv_reader:
             rows.append(row)
     return rows
-
 
 def select_random(rows=None):
     """
@@ -75,7 +68,6 @@ def select_random(rows=None):
         'answer': answer
     }
 
-
 def get_score():
     """
     return the string version of the score
@@ -86,6 +78,8 @@ def get_score():
         return "N/A"
     else:
         return str(score[0]) + " correct out of " + str(score[1])
+
+
 
 
 J_rows = read_csv('J')
