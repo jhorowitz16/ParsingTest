@@ -45,11 +45,15 @@ function makeAnswerInvisible() {
 function disableButtons() {
   document.getElementById("button--J").disabled = true;
   document.getElementById("button--W").disabled = true;
+
+  document.getElementById("button--next").disabled = false;
 }
 
 function enableButtons() {
   document.getElementById("button--J").disabled = false;
   document.getElementById("button--W").disabled = false;
+
+  document.getElementById("button--next").disabled = true;
 }
 
 function storeGet(key) {
@@ -88,6 +92,5 @@ function initStorage() {
 /* ============================================= */
 
 initStorage();
-setScoreText();
 
 window.onload = setScoreText;

@@ -52,10 +52,10 @@
   display: none;
 }
 
-.button--next {
-
-}
-
 h2 {
   margin: 0;
+}
+
+button:disabled {
+  opacity: 0.5;
 }
