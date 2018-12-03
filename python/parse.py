@@ -11,8 +11,8 @@ import datetime
 FILENAME = "../../data/message-10-31.json"
 MOCKED = "../../data/mocked-message.json"
 
-def read_data():
-    with open(FILENAME, "r") as read_file:
+def read_data(file_name=FILENAME):
+    with open(file_name, "r") as read_file:
         data = json.load(read_file, encoding='utf-8')
         return data["messages"]
 
