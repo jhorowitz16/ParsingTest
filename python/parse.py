@@ -5,11 +5,16 @@ import csv
 
 import utils
 import datetime
+import combine
 
 # sys.stdout = open('output.txt', 'w')
 
 FILENAME = "../../data/message-10-31.json"
 MOCKED = "../../data/mocked-message.json"
+
+FILENAME_BASE = "../../data/message-10-31.json"
+FILENAME_EXTRA = "../../data/message-12-2.json"
+
 
 def read_data(file_name=FILENAME):
     with open(file_name, "r") as read_file:
@@ -479,7 +484,9 @@ def demos(demo):
     run something demoable lol
     everything is based on messages
     """
-    messages = filter_data(read_data())
+    # messages = filter_data(read_data())
+    messages = combine.combine(FILENAME_BASE, FILENAME_EXTRA)
+    pdb.set_trace()
 
     if demo == "histograms":
         word_lengths = calc_msg_lengths(messages, "J")
@@ -535,4 +542,4 @@ def demos(demo):
 
 
 if __name__== "__main__":
-    demos("unique")
+    demos("frequencies")
