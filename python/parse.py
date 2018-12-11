@@ -490,22 +490,27 @@ def print_day(goal_day, messages):
     place is the index we left off at
     the first call starts at the front because we inverted messages
     """
+    global place
 
     curr = messages[place]
     curr_time = utils.get_time(curr)
     count_included = 0
 
+    import pdb; pdb.set_trace()
     while curr_time < goal_day and place < len(messages):
         print("continue" + str(curr_time))
         # keep going
         place += 1
-        curr_time = messages[place]
+        curr = messages[place]
+        curr_time = utils.get_time(curr)
 
     while utils.date_equal(curr_time, goal_day):
         print("same" + str(curr_time))
-        fprint(curr)
+        fancy_print(curr)
         place += 1
         count_included += 1
+        curr = messages[place]
+        curr_time = utils.get_time(curr)
 
     print("included: " + str(count_included))
 
@@ -522,11 +527,11 @@ def print_day(goal_day, messages):
 
 
 
-def fp(msg):
+def fancy_print(msg):
     """
     fancy print a msg
     """
-    print((curr["sender_name"], curr["content"]))
+    print((msg["sender_name"], msg["content"]))
 
 def demos(demo):
     """
@@ -589,20 +594,23 @@ def demos(demo):
         write_messages_to_csv(unique_msg_buckets, ["J", "W"])
 
     elif demo == "day_input":
-        input_day = input("input a day separated with commas (2018, 7, 7) default")
-        day = None
-        if input_day:
-            inputs = input_day.split(',')
-            day = datetime.date(inputs[0], inputs[1], inputs[2])
-        else:
-            day = datetime.date(2018, 7, 7)
-
-        final = datetime.date(2018, 12, 1)
-        diff = datetime.timedelta(days=1)
+        # ask for an integer since 7,7
+        input_delta = input("input number of days since (7, 7): ")
+        day = datetime.datetime(2018, 7, 7) + datetime.timedelta(days=input_delta)
+        print("=== day: " + str(input_delta) + " ===")
+        print("=== " + str(day) + " ===")
         inverted_messages = messages[::-1]
-        while day < final:
+
+        ALL = False
+
+        if ALL:
+            final = datetime.datetime(2018, 12, 1)
+            diff = datetime.timedelta(days=1)
+            while day < final:
+                print_day(day, inverted_messages)
+                day += diff
+        else:
             print_day(day, inverted_messages)
-            day += diff
 
 
 
