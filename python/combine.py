@@ -30,8 +30,10 @@ def combine(base, extra):
             break
         i -= 1
 
-
-    all_messages = extra_messages[i+1:] + base_messages
+    x = extra_messages[:i]
+    first = extra_messages[:i+1]
+    all_messages = extra_messages[:i+1] + base_messages
+    pdb.set_trace()
     base, extra, overlap = len(base_messages), len(extra_messages), i
     total = len(all_messages)
     print("base_messages length: " + str(base))
