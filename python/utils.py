@@ -22,7 +22,7 @@ def dput(d, key, value=1):
         d[key] += value
     else:
         d[key] = value
-        
+
 
 def dput_list(d, key, value):
     """
@@ -80,3 +80,9 @@ def test_to_day_shift(messages):
         timestamp = msg["timestamp_ms"]
         time = utils.get_time(msg)
         print(str(time) + " " + str(utils.to_day_shift(timestamp)))
+
+def date_equal(day1, day2):
+    """
+    are the two days the same by month and day
+    """
+    return day1.month == day2.month and day1.day == day2.day

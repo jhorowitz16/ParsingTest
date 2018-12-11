@@ -359,8 +359,13 @@ def write_z_to_csv(freqs, labels):
         freq_z_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         freq_z_csv.writerow(["artZ", labels[0], labels[1], "Total"])
 
+        count = 0
         for key in keys:
-            freq_z_csv.writerow([key, combined[key][0], combined[key][1], combined[key][0] + combined[key][1]])
+            try:
+                freq_z_csv.writerow([key, combined[key][0], combined[key][1], combined[key][0] + combined[key][1]])
+            except UnicodeEncodeError:
+                print(key, count)
+                count += 1
 
 
 def calc_count_by_day(messages):
@@ -477,7 +482,51 @@ def write_messages_to_csv(unique_msg_buckets, labels):
                 except UnicodeEncodeError:
                     pass
 
+place = 0
 
+def print_day(goal_day, messages):
+    """
+    take an input day and print the conversation on that day
+    place is the index we left off at
+    the first call starts at the front because we inverted messages
+    """
+
+    curr = messages[place]
+    curr_time = utils.get_time(curr)
+    count_included = 0
+
+    while curr_time < goal_day and place < len(messages):
+        print("continue" + str(curr_time))
+        # keep going
+        place += 1
+        curr_time = messages[place]
+
+    while utils.date_equal(curr_time, goal_day):
+        print("same" + str(curr_time))
+        fprint(curr)
+        place += 1
+        count_included += 1
+
+    print("included: " + str(count_included))
+
+    # sanity check
+    if curr_time > goal_day:
+        print("current time past goal_day, we are done")
+        if count_included == 0:
+            print("should be october 9th?")
+            pdb.set_trace()
+
+    if count_included == 0:
+        print("problem")
+        pdb.set_trace()
+
+
+
+def fp(msg):
+    """
+    fancy print a msg
+    """
+    print((curr["sender_name"], curr["content"]))
 
 def demos(demo):
     """
@@ -486,7 +535,6 @@ def demos(demo):
     """
     # messages = filter_data(read_data())
     messages = combine.combine(FILENAME_BASE, FILENAME_EXTRA)
-    pdb.set_trace()
 
     if demo == "histograms":
         word_lengths = calc_msg_lengths(messages, "J")
@@ -540,6 +588,23 @@ def demos(demo):
         print(combined)
         write_messages_to_csv(unique_msg_buckets, ["J", "W"])
 
+    elif demo == "day_input":
+        input_day = input("input a day separated with commas (2018, 7, 7) default")
+        day = None
+        if input_day:
+            inputs = input_day.split(',')
+            day = datetime.date(inputs[0], inputs[1], inputs[2])
+        else:
+            day = datetime.date(2018, 7, 7)
+
+        final = datetime.date(2018, 12, 1)
+        diff = datetime.timedelta(days=1)
+        inverted_messages = messages[::-1]
+        while day < final:
+            print_day(day, inverted_messages)
+            day += diff
+
+
 
 if __name__== "__main__":
-    demos("frequencies")
+    demos("day_input")

@@ -33,22 +33,11 @@ def combine(base, extra):
     x = extra_messages[:i]
     first = extra_messages[:i+1]
     all_messages = extra_messages[:i+1] + base_messages
-    pdb.set_trace()
     base, extra, overlap = len(base_messages), len(extra_messages), i
     total = len(all_messages)
-    print("base_messages length: " + str(base))
-    print("extra_messages length: " + str(extra))
-    print("overlap: " + str(overlap))
-    print("total: " + str(total))
-
-    print("----------")
-    print(all_messages[total-1])
-    print(all_messages[extra-1])
-
     prev = all_messages[0]["timestamp_ms"]
     for msg in all_messages:
         curr = msg["timestamp_ms"]
-        print(curr - prev)
         if curr - prev > 0:
             pdb.set_trace()
         prev = curr
