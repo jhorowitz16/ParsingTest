@@ -496,16 +496,15 @@ def print_day(goal_day, messages):
     curr_time = utils.get_time(curr)
     count_included = 0
 
-    import pdb; pdb.set_trace()
     while curr_time < goal_day and place < len(messages):
-        print("continue" + str(curr_time))
+        # print("continue" + str(curr_time))
         # keep going
         place += 1
         curr = messages[place]
         curr_time = utils.get_time(curr)
 
     while utils.date_equal(curr_time, goal_day):
-        print("same" + str(curr_time))
+        # print("same" + str(curr_time))
         fancy_print(curr)
         place += 1
         count_included += 1
@@ -531,7 +530,9 @@ def fancy_print(msg):
     """
     fancy print a msg
     """
-    print((msg["sender_name"], msg["content"]))
+    sender = msg["sender_name"][0]
+    space = " " * 80 if sender == "J" else ""
+    print(space + msg["content"])
 
 def demos(demo):
     """
@@ -597,8 +598,10 @@ def demos(demo):
         # ask for an integer since 7,7
         input_delta = input("input number of days since (7, 7): ")
         day = datetime.datetime(2018, 7, 7) + datetime.timedelta(days=input_delta)
-        print("=== day: " + str(input_delta) + " ===")
-        print("=== " + str(day) + " ===")
+        divide = " " + "=" * 10 + " "
+        print("\n\n" + divide * 3 + "\n\n")
+        print(divide + " day: " + str(input_delta) + divide)
+        print(divide + str(day) + divide)
         inverted_messages = messages[::-1]
 
         ALL = False
