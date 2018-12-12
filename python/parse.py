@@ -531,8 +531,11 @@ def fancy_print(msg):
     fancy print a msg
     """
     sender = msg["sender_name"][0]
-    space = " " * 80 if sender == "J" else ""
-    print(space + msg["content"])
+    space = " " * 80 if sender == "W" else ""
+    try:
+        print(space + msg["content"])
+    except UnicodeEncodeError:
+        print("unicode error")
 
 def demos(demo):
     """
@@ -596,12 +599,18 @@ def demos(demo):
 
     elif demo == "day_input":
         # ask for an integer since 7,7
-        input_delta = input("input number of days since (7, 7): ")
+
+        input_delta = None
+        if len(sys.argv) > 1:
+            input_delta = int(sys.argv[1])
+        else:
+            input_delta = input("input number of days since (7, 7): ")
+
         day = datetime.datetime(2018, 7, 7) + datetime.timedelta(days=input_delta)
         divide = " " + "=" * 10 + " "
         print("\n\n" + divide * 3 + "\n\n")
         print(divide + " day: " + str(input_delta) + divide)
-        print(divide + str(day) + divide)
+        print(divide + day.strftime("%A %b %d") + divide)
         inverted_messages = messages[::-1]
 
         ALL = False
