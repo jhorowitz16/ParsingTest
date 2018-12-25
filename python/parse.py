@@ -623,6 +623,10 @@ def demos(demo):
                 day += diff
         else:
             print_day(day, inverted_messages)
+            
+        print("\n\n" + divide * 3 + "\n\n")
+        print(divide + " day: " + str(input_delta) + divide)
+        print(divide + day.strftime("%A %b %d") + divide)
 
 
 
