@@ -13,7 +13,7 @@ FILENAME = "../../data/message-10-31.json"
 MOCKED = "../../data/mocked-message.json"
 
 FILENAME_BASE = "../../data/message-10-31.json"
-FILENAME_EXTRA = "../../data/message-12-2.json"
+FILENAME_EXTRA = "../../data/message-12-25.json"
 
 
 def read_data(file_name=FILENAME):
@@ -623,7 +623,7 @@ def demos(demo):
                 day += diff
         else:
             print_day(day, inverted_messages)
-            
+
         print("\n\n" + divide * 3 + "\n\n")
         print(divide + " day: " + str(input_delta) + divide)
         print(divide + day.strftime("%A %b %d") + divide)
