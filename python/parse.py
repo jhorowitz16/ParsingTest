@@ -9,7 +9,7 @@ import combine
 
 # sys.stdout = open('output.txt', 'w')
 
-FILENAME = "../../data/message-10-31.json"
+FILENAME = "../../data/message-4-4.json"
 MOCKED = "../../data/mocked-message.json"
 
 FILENAME_BASE = "../../data/message-10-31.json"
@@ -542,8 +542,9 @@ def demos(demo):
     run something demoable lol
     everything is based on messages
     """
+    messages = read_data()
     # messages = filter_data(read_data())
-    messages = combine.combine(FILENAME_BASE, FILENAME_EXTRA)
+    # messages = combine.combine(FILENAME_BASE, FILENAME_EXTRA)
 
     if demo == "histograms":
         word_lengths = calc_msg_lengths(messages, "J")
@@ -628,7 +629,20 @@ def demos(demo):
         print(divide + " day: " + str(input_delta) + divide)
         print(divide + day.strftime("%A %b %d") + divide)
 
+    elif demo == "stickers":
+        print("stickers")
+        sticker_freq = {}
+        for message in messages:
+            if "sticker" in message:
+                sticker_uri = message["sticker"]["uri"]
+                utils.dput(sticker_freq, sticker_uri)
+
+        for sticker, counter in sorted(sticker_freq.items(), key=lambda(x): -1 *x[1]):
+            print(str(counter) + '   ' + sticker)
+        import pdb; pdb.set_trace()
+
+
 
 
 if __name__== "__main__":
-    demos("day_input")
+    demos("stickers")
