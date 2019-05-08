@@ -9,7 +9,7 @@ import combine
 
 # sys.stdout = open('output.txt', 'w')
 
-FILENAME = "../../data/message-4-4.json"
+FILENAME = "../../data/message-5-1.json"
 MOCKED = "../../data/mocked-message.json"
 
 FILENAME_BASE = "../../data/message-10-31.json"
@@ -47,13 +47,14 @@ def calc_frequency(messages, target):
     for message in messages:
         if target and message["sender_name"][0] != target:
             continue
-        words = message["content"].split(" ")
-        for word in words:
-            if len(word) > 0:
-                if word in freq:
-                    freq[word] += 1
-                else:
-                    freq[word] = 1
+        if "content" in message:
+            words = message["content"].split(" ")
+            for word in words:
+                if len(word) > 0:
+                    if word in freq:
+                        freq[word] += 1
+                    else:
+                        freq[word] = 1
     return freq
 
 
@@ -66,7 +67,7 @@ def print_messages(messages, target):
         try:
             if count > 999999:
                 return
-            if message["sender_name"][0] == target:
+            if message["sender_name"][0] == target and "content" in message:
                 print(str(count) + " " + message["sender_name"][0] + ": " + message["content"])
                 count += 1
         except UnicodeEncodeError:
@@ -639,10 +640,8 @@ def demos(demo):
 
         for sticker, counter in sorted(sticker_freq.items(), key=lambda(x): -1 *x[1]):
             print(str(counter) + '   ' + sticker)
-        import pdb; pdb.set_trace()
-
 
 
 
 if __name__== "__main__":
-    demos("stickers")
+    demos("day")
