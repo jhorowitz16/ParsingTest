@@ -5,7 +5,7 @@ import csv
 
 import utils
 import datetime
-import combine
+# import combine
 
 # sys.stdout = open('output.txt', 'w')
 
@@ -138,14 +138,15 @@ def write_to_csv(messages):
         conversation_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
         for message in messages[::-1]:
-            content = message["content"]
-            sender_name = message["sender_name"][0]
-            try:
-                conversation_csv.writerow([content, sender_name])
-                success += 1
-            except:
-                print("UNICODE-ERR")
-                fail += 1
+            if "content" in message:
+                content = message["content"]
+                sender_name = message["sender_name"][0]
+                try:
+                    conversation_csv.writerow([content, sender_name])
+                    success += 1
+                except:
+                    print("UNICODE-ERR")
+                    fail += 1
     print("success: " + str(success))
     print("fail: " + str(fail))
 
@@ -641,7 +642,19 @@ def demos(demo):
         for sticker, counter in sorted(sticker_freq.items(), key=lambda(x): -1 *x[1]):
             print(str(counter) + '   ' + sticker)
 
+    elif demo == "timestamps":
+        print("timestamps")
+        freq = {}
+        for i in range(len(messages) - 1):
+            message_one, message_two = messages[i], messages[i+1]
+            time_one = utils.get_time(message_one)
+            time_two = utils.get_time(message_two)
+            time_diff = time_one - time_two
+            print("diff" + str(time_one - time_two))
+            key = (utils.get_sender(message_one) + utils.get_sender(message_two), time_diff)
+            utils.dput(freq, key)
+        pdb.set_trace()
 
 
 if __name__== "__main__":
-    demos("day")
+    demos("timestamps")

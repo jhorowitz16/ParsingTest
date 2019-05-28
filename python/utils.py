@@ -72,6 +72,12 @@ def get_time(msg):
     time = to_time(timestamp)
     return time
 
+def get_sender(msg):
+    """
+    get the first letter of the sender
+    """
+    return msg["sender_name"][0]
+
 def test_to_day_shift(messages):
     """
     backup a simple test
