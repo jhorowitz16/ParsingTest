@@ -643,17 +643,50 @@ def demos(demo):
             print(str(counter) + '   ' + sticker)
 
     elif demo == "timestamps":
-        print("timestamps")
         freq = {}
         for i in range(len(messages) - 1):
             message_one, message_two = messages[i], messages[i+1]
             time_one = utils.get_time(message_one)
             time_two = utils.get_time(message_two)
-            time_diff = time_one - time_two
-            print("diff" + str(time_one - time_two))
+            time_diff = (time_one - time_two).seconds
             key = (utils.get_sender(message_one) + utils.get_sender(message_two), time_diff)
             utils.dput(freq, key)
+
+        options = ['WW', 'WJ', 'JJ', 'JW']
+
+        full_results = []
+        for delta in range(3600):
+            results = []
+            for option in options:
+                lookup = (option, delta)
+                if lookup in freq:
+                    count = freq[lookup]
+                    results += [count]
+                else:
+                    results += [0]
+            full_results += [results]
+
+
+        with open('../deltas.csv', mode='w') as csv_file:
+            conversation_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+            conversation_csv.writerow(options)
+            for result in full_results:
+                conversation_csv.writerow(result)
+
+
+
+
         pdb.set_trace()
+
+
+
+
+
+
+
+
+
 
 
 if __name__== "__main__":
