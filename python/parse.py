@@ -6,6 +6,7 @@ import csv
 import utils
 import datetime
 # import combine
+import numpy
 
 # sys.stdout = open('output.txt', 'w')
 
@@ -643,48 +644,58 @@ def demos(demo):
             print(str(counter) + '   ' + sticker)
 
     elif demo == "timestamps":
+        messages = messages[::-1]
+        options = ['WW', 'WJ', 'JJ', 'JW']
         freq = {}
+        all_deltas = {}
         for i in range(len(messages) - 1):
             message_one, message_two = messages[i], messages[i+1]
             time_one = utils.get_time(message_one)
             time_two = utils.get_time(message_two)
-            time_diff = (time_one - time_two).seconds
-            key = (utils.get_sender(message_one) + utils.get_sender(message_two), time_diff)
+            time_diff = (time_two - time_one).seconds
+            label = utils.get_sender(message_one)  + utils.get_sender(message_two)
+            utils.dput_list(all_deltas, label, time_diff)
+            key = (label, time_diff)
             utils.dput(freq, key)
 
-        options = ['WW', 'WJ', 'JJ', 'JW']
-
         full_results = []
-        for delta in range(3600):
-            results = []
+        MAX_SECONDS = 24 * 3600
+        cutoffs = [5, 10, 30, 60, 300, 600, 1800, 3600, MAX_SECONDS]
+        results = [0 for _ in range(4)]
+        for delta in range(MAX_SECONDS + 1):
+            curr_results = []
             for option in options:
                 lookup = (option, delta)
                 if lookup in freq:
                     count = freq[lookup]
-                    results += [count]
+                    curr_results += [count]
                 else:
-                    results += [0]
-            full_results += [results]
+                    curr_results += [0]
+
+            #combine curr_results with the other ones before the cutoff
+            results = [curr_results[i] + results[i] for i in range(len(results))]
+
+            if delta in cutoffs:
+                results = [delta] + results
+                full_results += [results]
+                results = [0 for _ in range(4)]
 
 
         with open('../deltas.csv', mode='w') as csv_file:
             conversation_csv = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
-            conversation_csv.writerow(options)
+            conversation_csv.writerow([''] + options)
             for result in full_results:
                 conversation_csv.writerow(result)
 
-
-
+            for key in options:
+                deltas = all_deltas[key]
+                mean = numpy.mean(deltas)
+                std = numpy.std(deltas)
+                print(key + " | " + str(mean) + " | " + str(std))
+                conversation_csv.writerow(['', "mean", "std"])
+                conversation_csv.writerow([key, str(mean), str(std)])
 
         pdb.set_trace()
-
-
-
-
-
-
-
 
 
 
